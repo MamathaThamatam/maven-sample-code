@@ -46,4 +46,4 @@ jobs:
           pwd
           cd target
           ls
-          # curl -H "X-JFrog-Art-Api:${JF_ACCESS_TOKEN}" -H "X-Explode-Archive: true" -T  "https://chcsanofi.jfrog.io/artifactory/chc-maven-libs-release/"
+          # curl -H "X-JFrog-Art-Api:${JF_ACCESS_TOKEN}" -H "X-Explode-Archive: true" -T "" "https://chcsanofi.jfrog.io/artifactory/chc-maven-libs-release/"
