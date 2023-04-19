@@ -1,0 +1,49 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+
+# to setup environment variables
+env:
+  REPONAME: ${{ github.event.repository.name }}
+  WORKSPACE: ${{ github.workspace }}
+  GITHUB_PAT: ${{ secrets.GITHUB_PAT }} # first we have to add them to secrets and use them here
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest # to run github hosted runner (never give latest)
+    # to run inside a container 
+      
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+          submodules: 'true'
+          ref: master
+          token: ${{ env.GITHUB_PAT }}
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+
+      - name: Build with Maven
+        run: mvn clean install -U
+
+      - name: upload artifact to jfrog
+        uses: jfrog/setup-jfrog-cli@v3
+        env:
+          jfrog-url: "https://chcsanofi.jfrog.io/artifactory/"
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+
+      - name: Push artifact to Artifactory
+        uses: jfrog/artifactory-generic-upload@v2
+        with:
+          spec: '{"files": [{"pattern": "target/*.jar", "target": "chc-maven-libs-release/"}]}'
