@@ -9,13 +9,12 @@ on:
 env:
   REPONAME: ${{ github.event.repository.name }}
   WORKSPACE: ${{ github.workspace }}
-  GITHUB_PAT: ${{ secrets.GITHUB_PAT }} # first we have to add them to secrets and use them here
+  JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }} # first we have to add them to secrets and use them here
 
 jobs:
   Build:
     runs-on: ubuntu-latest # to run github hosted runner (never give latest)
-    # to run inside a container 
-      
+    
     defaults:
       run:
         shell: bash
@@ -27,8 +26,7 @@ jobs:
           fetch-depth: 0
           submodules: 'true'
           ref: master
-          token: ${{ env.GITHUB_PAT }}
-
+        
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
