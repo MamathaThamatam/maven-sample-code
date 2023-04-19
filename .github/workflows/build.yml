@@ -35,8 +35,14 @@ jobs:
       - name: Build with Maven
         run: mvn clean install -U
 
-      - name: upload artifact to jfrog
+      - name: Install jfrog CLI
         uses: jfrog/setup-jfrog-cli@v3
         env:
           jfrog-url: "https://chcsanofi.jfrog.io/artifactory/"
           JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+
+      - name: upload artifact to JFROG
+        run: |
+          pwd
+          ls
+          # curl -H "X-JFrog-Art-Api:${JF_ACCESS_TOKEN}" -H "X-Explode-Archive: true" -T  "https://chcsanofi.jfrog.io/artifactory/chc-maven-libs-release/"
